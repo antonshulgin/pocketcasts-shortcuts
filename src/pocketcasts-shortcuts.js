@@ -21,22 +21,18 @@
 	initShortcutHandlers();
 
 	function dispatchShortcut(event) {
+		if (areShortcutsDisabled()) {
+			return;
+		}
 		const keyCode = event.keyCode;
-		if (!hasShortcutHandler(keyCode)) {
+		const shortcutHandlers = getShortcutHandlers();
+		if (!shortcutHandlers.hasOwnProperty(keyCode)) {
 			return;
 		}
-		const shortcutHandlers = getShortcutHandlers();
+		if (!isFunction(shortcutHandlers[keyCode])) {
+			return;
+		}
 		shortcutHandlers[keyCode](event);
-	}
-
-	function hasShortcutHandler(keyCode) {
-		if (!isNumber(keyCode)) {
-			return;
-		}
-		const shortcutHandlers = getShortcutHandlers();
-		return isObject(shortcutHandlers) &&
-			shortcutHandlers.hasOwnProperty(keyCode) &&
-			isFunction(shortcutHandlers[keyCode]);
 	}
 
 	function getShortcutHandlers() {
@@ -50,13 +46,38 @@
 		shortcutHandlers[KEYCODE_L] = skipForward;
 		shortcutHandlers[KEYCODE_SLASH] = focusAtSearchField;
 		internals.shortcutHandlers = shortcutHandlers;
+
 		window.addEventListener('keyup', dispatchShortcut, false);
+
+		const textInputs = document.querySelectorAll('input[type="text"]');
+		if (!textInputs.length) {
+			return;
+		}
+		textInputs.forEach(function (input) {
+			input.addEventListener('focus', disableShortcuts, false);
+			input.addEventListener('blur', enableShortcuts, false);
+		});
 	}
 
-	function focusAtSearchField(event) {
-		console.log({
-			focusAtSearchField: event
-		});
+	function areShortcutsDisabled() {
+		return internals.areShortcutsDisabled;
+	}
+
+	function enableShortcuts() {
+		internals.areShortcutsDisabled = false;
+	}
+
+	function disableShortcuts() {
+		internals.areShortcutsDisabled = true;
+	}
+
+	function focusAtSearchField() {
+		const SELECTOR_SUBSCRIPTION_SEARCH = 'input[ng-model="search.title"]';
+		const searchField = document.querySelector(SELECTOR_SUBSCRIPTION_SEARCH);
+		if (!searchField) {
+			return;
+		}
+		searchField.focus();
 	}
 
 	function togglePlayback(event) {
@@ -94,11 +115,6 @@
 
 	function hasScope(item) {
 		return isObject(item) && isFunction(item.scope);
-	}
-
-	function isNumber(item) {
-		return (toStringCall(item) === '[object Number]') &&
-			isFinite(item);
 	}
 
 	function isFunction(item) {
