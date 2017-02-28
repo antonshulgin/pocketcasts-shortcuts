@@ -6,11 +6,6 @@
 		return;
 	}
 
-	const KEYCODE_J = 74;
-	const KEYCODE_K = 75;
-	const KEYCODE_L = 76;
-	const KEYCODE_SLASH = 191;
-
 	const internals = {};
 
 	setApp(findApp());
@@ -18,37 +13,39 @@
 		return;
 	}
 
-	initShortcutHandlers();
+	initShortcuts();
 
 	function dispatchShortcut(event) {
 		if (areShortcutsDisabled()) {
 			return;
 		}
 		const keyCode = event.keyCode;
-		const shortcutHandlers = getShortcutHandlers();
-		if (!shortcutHandlers.hasOwnProperty(keyCode)) {
+		const shortcuts = getShortcuts();
+		if (!shortcuts.hasOwnProperty(keyCode)) {
 			return;
 		}
-		if (!isFunction(shortcutHandlers[keyCode])) {
+		if (!isFunction(shortcuts[keyCode])) {
 			return;
 		}
-		shortcutHandlers[keyCode](event);
+		shortcuts[keyCode](event);
 	}
 
-	function getShortcutHandlers() {
-		return internals.shortcutHandlers;
+	function getShortcuts() {
+		return internals.shortcuts;
 	}
 
-	function initShortcutHandlers() {
-		const shortcutHandlers = {};
-		shortcutHandlers[KEYCODE_J] = skipBack;
-		shortcutHandlers[KEYCODE_K] = togglePlayback;
-		shortcutHandlers[KEYCODE_L] = skipForward;
-		shortcutHandlers[KEYCODE_SLASH] = focusAtSearchField;
-		internals.shortcutHandlers = shortcutHandlers;
-
+	function initShortcuts() {
+		const KEYCODE_J = 74;
+		const KEYCODE_K = 75;
+		const KEYCODE_L = 76;
+		const KEYCODE_SLASH = 191;
+		const shortcuts = {};
+		shortcuts[KEYCODE_J] = skipBack;
+		shortcuts[KEYCODE_K] = togglePlayback;
+		shortcuts[KEYCODE_L] = skipForward;
+		shortcuts[KEYCODE_SLASH] = focusAtSearchField;
+		internals.shortcuts = shortcuts;
 		window.addEventListener('keyup', dispatchShortcut, false);
-
 		const textInputs = document.querySelectorAll('input[type="text"]');
 		if (!textInputs.length) {
 			return;
@@ -73,6 +70,7 @@
 
 	function focusAtSearchField() {
 		const SELECTOR_SUBSCRIPTION_SEARCH = 'input[ng-model="search.title"]';
+
 		const searchField = document.querySelector(SELECTOR_SUBSCRIPTION_SEARCH);
 		if (!searchField) {
 			return;
