@@ -24,7 +24,7 @@
 			return;
 		}
 		const shortcuts = getShortcuts();
-		if (!isObject(shortcuts)) {
+		if (!shortcuts) {
 			return;
 		}
 		const keyCode = event.keyCode;
@@ -38,7 +38,7 @@
 	}
 
 	function getShortcuts() {
-		return internals.shortcuts;
+		return isObject(internals.shortcuts) ? internals.shortcuts : undefined;
 	}
 
 	function initShortcuts() {
