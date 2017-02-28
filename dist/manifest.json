@@ -16,9 +16,12 @@
 				"https://play.pocketcasts.com/*"
 			],
 			"js": [
-				"pocketcasts-shortcuts.js"
+				"init.js"
 			],
 			"run_at": "document_start"
 		}
+	],
+	"web_accessible_resources": [
+		"pocketcasts-shortcuts.js"
 	]
 }

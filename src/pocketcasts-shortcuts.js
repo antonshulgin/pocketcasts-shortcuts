@@ -2,58 +2,115 @@
 	// jshint esnext: true
 	'use strict';
 
-	window.addEventListener('load', getOutside, false);
-
-	function getOutside() {
-		const script = document.createElement('script');
-		script.textContent = '(' + init.toString() +')(this)';
-		document.body.appendChild(script);
+	if (!isObject(angular)) {
+		return;
 	}
 
-	function init(window) {
-		const angular = window.angular;
+	const KEYCODE_J = 74;
+	const KEYCODE_K = 75;
+	const KEYCODE_L = 76;
+	const KEYCODE_SLASH = 191;
 
-		if (!isObject(angular)) {
+	const internals = {};
+
+	setApp(findApp());
+	if (!getApp()) {
+		return;
+	}
+
+	initShortcutHandlers();
+
+	function dispatchShortcut(event) {
+		const keyCode = event.keyCode;
+		if (!hasShortcutHandler(keyCode)) {
 			return;
 		}
+		const shortcutHandlers = getShortcutHandlers();
+		shortcutHandlers[keyCode](event);
+	}
 
-		const internals = {};
-
-		setApp(findApp());
-		if (!getApp()) {
+	function hasShortcutHandler(keyCode) {
+		if (!isNumber(keyCode)) {
 			return;
 		}
+		const shortcutHandlers = getShortcutHandlers();
+		return isObject(shortcutHandlers) &&
+			shortcutHandlers.hasOwnProperty(keyCode) &&
+			isFunction(shortcutHandlers[keyCode]);
+	}
 
-		function getApp() {
-			return internals.app;
-		}
+	function getShortcutHandlers() {
+		return internals.shortcutHandlers;
+	}
 
-		function setApp(app) {
-			if (!hasScope(app)) {
-				return;
-			}
-			internals.app = app.scope();
-		}
+	function initShortcutHandlers() {
+		const shortcutHandlers = {};
+		shortcutHandlers[KEYCODE_J] = skipBack;
+		shortcutHandlers[KEYCODE_K] = togglePlayback;
+		shortcutHandlers[KEYCODE_L] = skipForward;
+		shortcutHandlers[KEYCODE_SLASH] = focusAtSearchField;
+		internals.shortcutHandlers = shortcutHandlers;
+		window.addEventListener('keyup', dispatchShortcut, false);
+	}
 
-		function findApp() {
-			return angular.element(document.body);
-		}
+	function focusAtSearchField(event) {
+		console.log({
+			focusAtSearchField: event
+		});
+	}
 
-		function hasScope(item) {
-			return isObject(item) && isFunction(item.scope);
-		}
+	function togglePlayback(event) {
+		console.log({
+			togglePlayback: event
+		});
+	}
 
-		function isFunction(item) {
-			return toStringCall(item) === '[object Function]';
-		}
+	function skipForward(event) {
+		console.log({
+			skipForward: event
+		});
+	}
 
-		function isObject(item) {
-			return toStringCall(item) === '[object Object]';
-		}
+	function skipBack(event) {
+		console.log({
+			skipBack: event
+		});
+	}
 
-		function toStringCall(item) {
-			return Object.prototype.toString.call(item);
+	function getApp() {
+		return internals.app;
+	}
+
+	function setApp(app) {
+		if (!hasScope(app)) {
+			return;
 		}
+		internals.app = app.scope();
+	}
+
+	function findApp() {
+		return angular.element(document.body);
+	}
+
+	function hasScope(item) {
+		return isObject(item) && isFunction(item.scope);
+	}
+
+	function isNumber(item) {
+		return (toStringCall(item) === '[object Number]') &&
+			isFinite(item);
+	}
+
+	function isFunction(item) {
+		return toStringCall(item) === '[object Function]';
+	}
+
+	function isObject(item) {
+		return toStringCall(item) === '[object Object]';
+	}
+
+	function toStringCall(item) {
+		return Object.prototype.toString.call(item);
 	}
 
 })();

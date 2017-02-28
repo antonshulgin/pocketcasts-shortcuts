@@ -4,6 +4,7 @@
 
 const gulp = require('gulp');
 const concat = require('gulp-concat');
+const sourcemaps = require('gulp-sourcemaps');
 const uglify = require('gulp-uglify');
 
 module.exports = function (config) {
@@ -11,8 +12,10 @@ module.exports = function (config) {
 	gulp.task('process-javascript', function () {
 		return gulp
 			.src(config.src.js)
-			.pipe(concat(config.dist.filenames.js))
-			.pipe(uglify())
+			//.pipe(sourcemaps.init())
+			//.pipe(concat(config.dist.filenames.js))
+			//.pipe(uglify())
+			//.pipe(sourcemaps.write('.'))
 			.pipe(gulp.dest(config.dist.root));
 	});
 
