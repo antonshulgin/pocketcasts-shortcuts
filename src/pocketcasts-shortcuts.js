@@ -8,12 +8,16 @@
 
 	const internals = {};
 
-	setApp(findApp());
-	if (!getApp()) {
+	if (!findApp()) {
 		return;
 	}
 
+	findSearchField();
 	initShortcuts();
+
+	window.shortcuts = {
+		internals: internals
+	};
 
 	function dispatchShortcut(event) {
 		if (areShortcutsDisabled()) {
@@ -71,18 +75,63 @@
 	}
 
 	function focusAtSearchField() {
-		const SELECTOR_SUBSCRIPTION_SEARCH = 'input[ng-model="search.title"]';
-		const searchField = document.querySelector(SELECTOR_SUBSCRIPTION_SEARCH);
+		const searchField = getSearchField();
 		if (!searchField) {
 			return;
 		}
 		searchField.focus();
 	}
 
-	function togglePlayback(event) {
-		console.log({
-			togglePlayback: event
-		});
+	function getSearchField() {
+		return internals.searchField;
+	}
+
+	function findSearchField() {
+		const SELECTOR_SUBSCRIPTION_SEARCH = 'input[ng-model="search.title"]';
+		const searchField = document.querySelector(SELECTOR_SUBSCRIPTION_SEARCH);
+		if (!searchField) {
+			return;
+		}
+		internals.searchField = searchField;
+		return getSearchField();
+	}
+
+	function togglePlayback() {
+		if (!isPlayerLoaded()) {
+			return;
+		}
+		if (isPlayerPlaying()) {
+			getPlayer().pause();
+			return;
+		}
+		getPlayer().play();
+	}
+
+	function isPlayerPlaying() {
+		const player = getPlayer();
+		if (!player) {
+			return;
+		}
+		return player.playing;
+	}
+
+	function isPlayerLoaded() {
+		const player = getPlayer();
+		if (!player) {
+			return;
+		}
+		return player.loaded;
+	}
+
+	function getPlayer() {
+		const app = getApp();
+		if (!app) {
+			return;
+		}
+		if (!isObject(app.mediaPlayer)) {
+			return;
+		}
+		return app.mediaPlayer;
 	}
 
 	function skipForward(event) {
@@ -101,15 +150,13 @@
 		return internals.app;
 	}
 
-	function setApp(app) {
+	function findApp() {
+		const app = angular.element(document.body);
 		if (!hasScope(app)) {
 			return;
 		}
 		internals.app = app.scope();
-	}
-
-	function findApp() {
-		return angular.element(document.body);
+		return getApp();
 	}
 
 	function hasScope(item) {
