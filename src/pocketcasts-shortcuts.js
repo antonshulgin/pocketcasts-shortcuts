@@ -39,12 +39,11 @@
 		const KEYCODE_K = 75;
 		const KEYCODE_L = 76;
 		const KEYCODE_SLASH = 191;
-		const shortcuts = {};
-		shortcuts[KEYCODE_J] = skipBack;
-		shortcuts[KEYCODE_K] = togglePlayback;
-		shortcuts[KEYCODE_L] = skipForward;
-		shortcuts[KEYCODE_SLASH] = focusAtSearchField;
-		internals.shortcuts = shortcuts;
+		internals.shortcuts = {};
+		internals.shortcuts[KEYCODE_J] = skipBack;
+		internals.shortcuts[KEYCODE_K] = togglePlayback;
+		internals.shortcuts[KEYCODE_L] = skipForward;
+		internals.shortcuts[KEYCODE_SLASH] = focusAtSearchField;
 		window.addEventListener('keyup', dispatchShortcut, false);
 		const textInputs = document.querySelectorAll('input[type="text"]');
 		if (!textInputs.length) {
@@ -70,7 +69,6 @@
 
 	function focusAtSearchField() {
 		const SELECTOR_SUBSCRIPTION_SEARCH = 'input[ng-model="search.title"]';
-
 		const searchField = document.querySelector(SELECTOR_SUBSCRIPTION_SEARCH);
 		if (!searchField) {
 			return;
