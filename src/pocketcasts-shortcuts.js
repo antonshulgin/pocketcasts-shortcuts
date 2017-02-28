@@ -19,8 +19,11 @@
 		if (areShortcutsDisabled()) {
 			return;
 		}
-		const keyCode = event.keyCode;
 		const shortcuts = getShortcuts();
+		if (!isObject(shortcuts)) {
+			return;
+		}
+		const keyCode = event.keyCode;
 		if (!shortcuts.hasOwnProperty(keyCode)) {
 			return;
 		}
