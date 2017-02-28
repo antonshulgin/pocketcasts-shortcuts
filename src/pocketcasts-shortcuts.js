@@ -114,6 +114,9 @@
 	}
 
 	function setVolume(volume) {
+		if (!isPlayerLoaded()) {
+			return;
+		}
 		if (!isNumber(volume)) {
 			return;
 		}
@@ -245,7 +248,7 @@
 	}
 
 	function isNumber(item) {
-		return toStringCall(item) === '[object Number]' &&
+		return (toStringCall(item) === '[object Number]') &&
 			isFinite(item);
 	}
 
