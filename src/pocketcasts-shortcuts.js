@@ -49,6 +49,7 @@
 		const KEYCODE_SLASH = 191;
 		const KEYCODE_MINUS = 189;
 		const KEYCODE_PLUS = 187;
+		const KEYCODE_M = 77;
 		internals.shortcuts = {};
 		internals.shortcuts[KEYCODE_J] = skipBack;
 		internals.shortcuts[KEYCODE_K] = togglePlayback;
@@ -56,6 +57,7 @@
 		internals.shortcuts[KEYCODE_SLASH] = focusAtSearchField;
 		internals.shortcuts[KEYCODE_MINUS] = decreaseVolume;
 		internals.shortcuts[KEYCODE_PLUS] = increaseVolume;
+		internals.shortcuts[KEYCODE_M] = toggleMute;
 		window.addEventListener('keyup', dispatchShortcut, false);
 		const textInputs = document.querySelectorAll('input[type="text"]');
 		if (!textInputs.length) {
@@ -79,11 +81,29 @@
 		internals.areShortcutsDisabled = true;
 	}
 
+	function toggleMute() {
+		if (!isPlayerLoaded()) {
+			return;
+		}
+		const player = getPlayer();
+		if (isMuted()) {
+			player.unmute();
+			return;
+		}
+		player.mute();
+	}
+
+	function isMuted() {
+		if (!isPlayerLoaded()) {
+			return;
+		}
+		return getPlayer().muted;
+	}
+
 	function increaseVolume() {
 		if (!isPlayerLoaded()) {
 			return;
 		}
-		console.log('increaseVolume');
 		setVolume(getVolume() + 0.1);
 	}
 
@@ -92,7 +112,6 @@
 			return;
 		}
 		setVolume(getVolume() - 0.1);
-		console.log('decreaseVolume');
 	}
 
 	function setVolume(volume) {
