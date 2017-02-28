@@ -20,6 +20,7 @@
 	};
 
 	function dispatchShortcut(event) {
+		console.log(event.keyCode);
 		if (areShortcutsDisabled()) {
 			return;
 		}
@@ -46,11 +47,15 @@
 		const KEYCODE_K = 75;
 		const KEYCODE_L = 76;
 		const KEYCODE_SLASH = 191;
+		const KEYCODE_MINUS = 189;
+		const KEYCODE_PLUS = 187;
 		internals.shortcuts = {};
 		internals.shortcuts[KEYCODE_J] = skipBack;
 		internals.shortcuts[KEYCODE_K] = togglePlayback;
 		internals.shortcuts[KEYCODE_L] = skipForward;
 		internals.shortcuts[KEYCODE_SLASH] = focusAtSearchField;
+		internals.shortcuts[KEYCODE_MINUS] = decreaseVolume;
+		internals.shortcuts[KEYCODE_PLUS] = increaseVolume;
 		window.addEventListener('keyup', dispatchShortcut, false);
 		const textInputs = document.querySelectorAll('input[type="text"]');
 		if (!textInputs.length) {
@@ -74,26 +79,52 @@
 		internals.areShortcutsDisabled = true;
 	}
 
-	function focusAtSearchField() {
-		const searchField = getSearchField();
-		if (!searchField) {
+	function increaseVolume() {
+		if (!isPlayerLoaded()) {
 			return;
 		}
-		searchField.focus();
+		console.log('increaseVolume');
+		setVolume(getVolume() + 0.1);
 	}
 
-	function getSearchField() {
-		return internals.searchField;
-	}
-
-	function findSearchField() {
-		const SELECTOR_SUBSCRIPTION_SEARCH = 'input[ng-model="search.title"]';
-		const searchField = document.querySelector(SELECTOR_SUBSCRIPTION_SEARCH);
-		if (!searchField) {
+	function decreaseVolume() {
+		if (!isPlayerLoaded()) {
 			return;
 		}
-		internals.searchField = searchField;
-		return getSearchField();
+		setVolume(getVolume() - 0.1);
+		console.log('decreaseVolume');
+	}
+
+	function setVolume(volume) {
+		if (!isNumber(volume)) {
+			return;
+		}
+		const player = getPlayer();
+		if (!player) {
+			return;
+		}
+		if (!isFunction(player.setVolume)) {
+			return;
+		}
+		const MAX_VOLUME = 1;
+		const MIN_VOLUME = 0;
+		if (volume >= MAX_VOLUME) {
+			player.setVolume(MAX_VOLUME);
+			return;
+		}
+		if (volume <= MIN_VOLUME) {
+			player.setVolume(MIN_VOLUME);
+			return;
+		}
+		player.setVolume(volume);
+	}
+
+	function getVolume() {
+		const player = getPlayer();
+		if (!player) {
+			return 0;
+		}
+		return isNumber(player.volume) ? player.volume : 0;
 	}
 
 	function togglePlayback() {
@@ -156,6 +187,28 @@
 		player.jumpBack();
 	}
 
+	function focusAtSearchField() {
+		const searchField = getSearchField();
+		if (!searchField) {
+			return;
+		}
+		searchField.focus();
+	}
+
+	function getSearchField() {
+		return internals.searchField;
+	}
+
+	function findSearchField() {
+		const SELECTOR_SUBSCRIPTION_SEARCH = 'input[ng-model="search.title"]';
+		const searchField = document.querySelector(SELECTOR_SUBSCRIPTION_SEARCH);
+		if (!searchField) {
+			return;
+		}
+		internals.searchField = searchField;
+		return getSearchField();
+	}
+
 	function getApp() {
 		return internals.app;
 	}
@@ -171,6 +224,11 @@
 
 	function hasScope(item) {
 		return isObject(item) && isFunction(item.scope);
+	}
+
+	function isNumber(item) {
+		return toStringCall(item) === '[object Number]' &&
+			isFinite(item);
 	}
 
 	function isFunction(item) {
