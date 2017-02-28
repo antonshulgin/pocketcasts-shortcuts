@@ -134,16 +134,20 @@
 		return app.mediaPlayer;
 	}
 
-	function skipForward(event) {
-		console.log({
-			skipForward: event
-		});
+	function skipForward() {
+		const player = getPlayer();
+		if (!player) {
+			return;
+		}
+		player.jumpForward();
 	}
 
-	function skipBack(event) {
-		console.log({
-			skipBack: event
-		});
+	function skipBack() {
+		const player = getPlayer();
+		if (!player) {
+			return;
+		}
+		player.jumpBack();
 	}
 
 	function getApp() {
