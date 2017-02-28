@@ -20,7 +20,6 @@
 	};
 
 	function dispatchShortcut(event) {
-		console.log(event.keyCode);
 		if (areShortcutsDisabled()) {
 			return;
 		}
