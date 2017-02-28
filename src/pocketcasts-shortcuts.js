@@ -135,16 +135,22 @@
 	}
 
 	function skipForward() {
+		if (!isPlayerLoaded()) {
+			return;
+		}
 		const player = getPlayer();
-		if (!player) {
+		if (!isFunction(player.jumpForward)) {
 			return;
 		}
 		player.jumpForward();
 	}
 
 	function skipBack() {
+		if (!isPlayerLoaded()) {
+			return;
+		}
 		const player = getPlayer();
-		if (!player) {
+		if (!isFunction(player.jumpBack)) {
 			return;
 		}
 		player.jumpBack();
