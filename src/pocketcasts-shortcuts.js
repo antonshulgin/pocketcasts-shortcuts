@@ -15,10 +15,6 @@
 	findSearchField();
 	initShortcuts();
 
-	window.shortcuts = {
-		internals: internals
-	};
-
 	function dispatchShortcut(event) {
 		if (areShortcutsDisabled()) {
 			return;
