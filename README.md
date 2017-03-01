@@ -8,9 +8,9 @@ A Chrome extension that extends [Pocketcasts](https://play.pocketcasts.com) web
 
 - `k` — play/pause
 
-- `m` - mute/unmute
+- `m` — mute/unmute
 
-- `-`/`=` – decrease/increase volume
+- `-`/`=` — decrease/increase volume
 
 - `/` — filter subscriptions
 
