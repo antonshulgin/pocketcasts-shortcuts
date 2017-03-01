@@ -129,11 +129,11 @@
 		}
 		const MAX_VOLUME = 1;
 		const MIN_VOLUME = 0;
-		if (volume >= MAX_VOLUME) {
+		if (volume > MAX_VOLUME) {
 			player.setVolume(MAX_VOLUME);
 			return;
 		}
-		if (volume <= MIN_VOLUME) {
+		if (volume < MIN_VOLUME) {
 			player.setVolume(MIN_VOLUME);
 			return;
 		}
