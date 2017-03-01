@@ -10,7 +10,7 @@ A Chrome extension that extends [Pocketcasts](https://play.pocketcasts.com) web
 
 - `m` - mute/unmute
 
-- `-`/`=` - decrease/increase volume
+- `-`/`=` – decrease/increase volume
 
 - `/` — filter subscriptions
 
