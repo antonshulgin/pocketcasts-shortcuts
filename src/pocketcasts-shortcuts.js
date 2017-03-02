@@ -240,12 +240,20 @@
 	}
 
 	function findApp() {
-		const app = angular.element(document.body);
-		if (!hasScope(app)) {
+		const app = getScope(document.body);
+		if (!app) {
 			return;
 		}
-		internals.app = app.scope();
+		internals.app = app;
 		return getApp();
+	}
+
+	function getScope(element) {
+		const ngElement = angular.element(element);
+		if (!hasScope(ngElement)) {
+			return;
+		}
+		return ngElement.scope();
 	}
 
 	function hasScope(item) {
