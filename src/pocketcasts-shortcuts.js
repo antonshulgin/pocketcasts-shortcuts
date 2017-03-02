@@ -12,8 +12,10 @@
 		return;
 	}
 
-	findSearchField();
+	findSubscriptionSearchField();
 	initShortcuts();
+
+	window.pcs = internals;
 
 	function dispatchShortcut(event) {
 		if (areShortcutsDisabled()) {
@@ -24,6 +26,7 @@
 			return;
 		}
 		const keyCode = event.keyCode;
+		console.log(keyCode);
 		if (!shortcuts.hasOwnProperty(keyCode)) {
 			return;
 		}
@@ -45,14 +48,16 @@
 		const KEYCODE_MINUS = 189;
 		const KEYCODE_PLUS = 187;
 		const KEYCODE_M = 77;
+		const KEYCODE_S = 83;
 		internals.shortcuts = {};
 		internals.shortcuts[KEYCODE_J] = skipBack;
 		internals.shortcuts[KEYCODE_K] = togglePlayback;
 		internals.shortcuts[KEYCODE_L] = skipForward;
-		internals.shortcuts[KEYCODE_SLASH] = focusAtSearchField;
+		internals.shortcuts[KEYCODE_SLASH] = initiateSubscriptionSearch;
 		internals.shortcuts[KEYCODE_MINUS] = decreaseVolume;
 		internals.shortcuts[KEYCODE_PLUS] = increaseVolume;
 		internals.shortcuts[KEYCODE_M] = toggleMute;
+		internals.shortcuts[KEYCODE_S] = initiatePodcastSearch;
 		window.addEventListener('keyup', dispatchShortcut, false);
 		const textInputs = document.querySelectorAll('input[type="text"]');
 		if (!textInputs.length) {
@@ -204,26 +209,30 @@
 		player.jumpBack();
 	}
 
-	function focusAtSearchField() {
-		const searchField = getSearchField();
+	function initiatePodcastSearch() {
+		console.log('initiatePodcastSearch');
+	}
+
+	function initiateSubscriptionSearch() {
+		const searchField = getSubscriptionSearchField();
 		if (!searchField) {
 			return;
 		}
 		searchField.focus();
 	}
 
-	function getSearchField() {
+	function getSubscriptionSearchField() {
 		return internals.searchField;
 	}
 
-	function findSearchField() {
+	function findSubscriptionSearchField() {
 		const SELECTOR_SUBSCRIPTION_SEARCH = 'input[ng-model="search.title"]';
 		const searchField = document.querySelector(SELECTOR_SUBSCRIPTION_SEARCH);
 		if (!searchField) {
 			return;
 		}
 		internals.searchField = searchField;
-		return getSearchField();
+		return getSubscriptionSearchField();
 	}
 
 	function getApp() {
