@@ -55,7 +55,7 @@
 		internals.shortcuts[KEYCODE_MINUS] = decreaseVolume;
 		internals.shortcuts[KEYCODE_PLUS] = increaseVolume;
 		internals.shortcuts[KEYCODE_M] = toggleMute;
-		internals.shortcuts[KEYCODE_S] = togglePodcastSearch;
+		internals.shortcuts[KEYCODE_S] = openPodcastSearch;
 		window.addEventListener('keyup', dispatchShortcut, false);
 		const textInputs = document.querySelectorAll('input[type="text"]');
 		if (!textInputs.length) {
@@ -216,9 +216,29 @@
 		internals.podcastSearch = podcastSearch;
 		const searchInput = container.querySelector('[ng-model="searchStr"]');
 		if (searchInput) {
-			searchInput.addEventListener('blur', togglePodcastSearch, false);
+			searchInput.addEventListener('blur', closePodcastSearch, false);
 		}
 		return getPodcastSearch();
+	}
+
+	function openPodcastSearch() {
+		if (!isPodcastSearchOpen()) {
+			togglePodcastSearch();
+		}
+	}
+
+	function closePodcastSearch() {
+		if (isPodcastSearchOpen()) {
+			togglePodcastSearch();
+		}
+	}
+
+	function isPodcastSearchOpen() {
+		const podcastSearch = getPodcastSearch();
+		if (!podcastSearch) {
+			return;
+		}
+		return podcastSearch.isSearchOpen;
 	}
 
 	function togglePodcastSearch() {
