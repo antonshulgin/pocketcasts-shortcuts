@@ -1,11 +1,24 @@
 {
 	"manifest_version": 2,
-
-	"name": "pocketcasts-shortcuts",
+	"name": "Pocketcasts Shortcuts",
 	"description": "Extended shortcuts for Pocket Casts",
 	"version": "1",
+	"icons": {
+		"16": "assets/icons/16.pocketcasts-shortcuts.png",
+		"19": "assets/icons/19.pocketcasts-shortcuts.png",
+		"38": "assets/icons/38.pocketcasts-shortcuts.png",
+		"48": "assets/icons/48.pocketcasts-shortcuts.png",
+		"128": "assets/icons/128.pocketcasts-shortcuts.png"
+	},
 	"browser_action": {
-		"default_title": "pocketcasts-shortcuts"
+		"default_title": "Pocketcasts Shortcuts",
+		"default_icon": {
+			"16": "assets/icons/16.pocketcasts-shortcuts.png",
+			"19": "assets/icons/19.pocketcasts-shortcuts.png",
+			"38": "assets/icons/38.pocketcasts-shortcuts.png",
+			"48": "assets/icons/48.pocketcasts-shortcuts.png",
+			"128": "assets/icons/128.pocketcasts-shortcuts.png"
+		}
 	},
 	"permissions": [
 		"https://play.pocketcasts.com/"
