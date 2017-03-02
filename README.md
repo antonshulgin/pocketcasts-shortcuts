@@ -16,6 +16,6 @@ A Chrome extension that extends [Pocketcasts](https://play.pocketcasts.com) web
 
 - `s` — toggle podcast search form
 
-^-- These are true for US QWERTY PC layouts. Your mileage may vary.
+^-- These are true for US QWERTY PC layout. Your mileage may vary.
 
 Currently work in progress.

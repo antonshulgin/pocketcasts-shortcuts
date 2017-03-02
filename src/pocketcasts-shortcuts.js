@@ -12,11 +12,9 @@
 		return;
 	}
 
-	findSubscriptionSearchField();
+	findPodcastFilter();
 	findPodcastSearchForm();
 	initShortcuts();
-
-	window.pcs = internals;
 
 	function dispatchShortcut(event) {
 		if (areShortcutsDisabled()) {
@@ -27,7 +25,6 @@
 			return;
 		}
 		const keyCode = event.keyCode;
-		console.log(keyCode);
 		if (!shortcuts.hasOwnProperty(keyCode)) {
 			return;
 		}
@@ -54,7 +51,7 @@
 		internals.shortcuts[KEYCODE_J] = skipBack;
 		internals.shortcuts[KEYCODE_K] = togglePlayback;
 		internals.shortcuts[KEYCODE_L] = skipForward;
-		internals.shortcuts[KEYCODE_SLASH] = toggleSubscriptionSearch;
+		internals.shortcuts[KEYCODE_SLASH] = togglePodcastFilter;
 		internals.shortcuts[KEYCODE_MINUS] = decreaseVolume;
 		internals.shortcuts[KEYCODE_PLUS] = increaseVolume;
 		internals.shortcuts[KEYCODE_M] = toggleMute;
@@ -238,26 +235,25 @@
 		return internals.podcastSearch;
 	}
 
-	function toggleSubscriptionSearch() {
-		const searchField = getSubscriptionSearchField();
-		if (!searchField) {
+	function togglePodcastFilter() {
+		const podcastFilter = getPodcastFilter();
+		if (!podcastFilter) {
 			return;
 		}
-		searchField.focus();
+		podcastFilter.focus();
 	}
 
-	function getSubscriptionSearchField() {
-		return internals.searchField;
+	function getPodcastFilter() {
+		return internals.podcastFilter;
 	}
 
-	function findSubscriptionSearchField() {
-		const SELECTOR_SUBSCRIPTION_SEARCH = 'input[ng-model="search.title"]';
-		const searchField = document.querySelector(SELECTOR_SUBSCRIPTION_SEARCH);
-		if (!searchField) {
+	function findPodcastFilter() {
+		const podcastFilter = document.querySelector('input[ng-model="search.title"]');
+		if (!podcastFilter) {
 			return;
 		}
-		internals.searchField = searchField;
-		return getSubscriptionSearchField();
+		internals.podcastFilter = podcastFilter;
+		return getPodcastFilter();
 	}
 
 	function getApp() {
