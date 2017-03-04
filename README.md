@@ -4,18 +4,10 @@ A Chrome extension that extends [Pocketcasts](https://play.pocketcasts.com) web
 
 - `j` — skip back
 
-- `l` — skip forward
-
 - `k` — play/pause
+
+- `l` — skip forward
 
 - `m` — mute/unmute
 
 - `-`/`=` — decrease/increase volume
-
-- `/` — filter subscriptions
-
-- `s` — toggle podcast search form
-
-^-- These are true for US QWERTY PC layout. Your mileage may vary.
-
-Currently work in progress.
