@@ -12,7 +12,6 @@
 		return;
 	}
 
-	findPodcastSearchForm();
 	initShortcuts();
 
 	function dispatchShortcut(event) {
@@ -44,7 +43,6 @@
 		const KEYCODE_MINUS = 189;
 		const KEYCODE_PLUS = 187;
 		const KEYCODE_M = 77;
-		const KEYCODE_S = 83;
 		internals.shortcuts = {};
 		internals.shortcuts[KEYCODE_J] = skipBack;
 		internals.shortcuts[KEYCODE_K] = togglePlayback;
@@ -52,7 +50,6 @@
 		internals.shortcuts[KEYCODE_MINUS] = decreaseVolume;
 		internals.shortcuts[KEYCODE_PLUS] = increaseVolume;
 		internals.shortcuts[KEYCODE_M] = toggleMute;
-		internals.shortcuts[KEYCODE_S] = openPodcastSearch;
 		window.addEventListener('keyup', dispatchShortcut, false);
 		const textInputs = document.querySelectorAll('input[type="text"]');
 		if (!textInputs.length) {
@@ -202,54 +199,6 @@
 			return;
 		}
 		player.jumpBack();
-	}
-
-	function findPodcastSearchForm() {
-		const container = document.querySelector('[ng-controller="SearchController"]');
-		const podcastSearch = getScope(container);
-		if (!podcastSearch) {
-			return;
-		}
-		internals.podcastSearch = podcastSearch;
-		const searchInput = container.querySelector('[ng-model="searchStr"]');
-		if (searchInput) {
-			searchInput.addEventListener('blur', closePodcastSearch, false);
-		}
-		return getPodcastSearch();
-	}
-
-	function openPodcastSearch() {
-		if (!isPodcastSearchOpen()) {
-			togglePodcastSearch();
-		}
-	}
-
-	function closePodcastSearch() {
-		if (isPodcastSearchOpen()) {
-			togglePodcastSearch();
-		}
-	}
-
-	function isPodcastSearchOpen() {
-		const podcastSearch = getPodcastSearch();
-		if (!podcastSearch) {
-			return;
-		}
-		return podcastSearch.isSearchOpen;
-	}
-
-	function togglePodcastSearch() {
-		const podcastSearch = getPodcastSearch();
-		if (!podcastSearch) {
-			return;
-		}
-		podcastSearch.$apply(function () {
-			podcastSearch.openCloseSearch();
-		});
-	}
-
-	function getPodcastSearch() {
-		return internals.podcastSearch;
 	}
 
 	function getApp() {
