@@ -12,6 +12,7 @@
 	},
 	"browser_action": {
 		"default_title": "Pocketcasts Shortcuts",
+		"default_popup": "popup/popup.html",
 		"default_icon": {
 			"16": "assets/icons/16.pocketcasts-shortcuts.png",
 			"19": "assets/icons/19.pocketcasts-shortcuts.png",
